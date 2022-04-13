@@ -41,5 +41,45 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
+
+    <!-- Button trigger modal -->
+    <h1>
+      <!--オーバーレイを表示するようにしたい-->
+      <a class="btn btn-primary" href="#" role="button">+ タスクを追加</a>
+    </h1>
+
+    <!--オーバーレイのなかで表示したい-->
+    <div id="modal-content">
+      <div id="modal-overlay"></div>
+      <form action="#" method="post">
+        <label for="category_id">カテゴリ</label>
+        <select name="category_id" id="category_id">
+          <option>生活</option>
+          <option>勉強</option>
+          <option>仕事</option>
+          <option>趣味</option>
+        </select>
+
+        <label for="task_name">タスク名</label>
+        <input type="text" name="task_name" id="task_name" />
+
+        <label for="deadline">期日</label>
+        <input type="date" />
+
+        <label for="memo">メモ</label>
+        <textarea name="memo" id="memo" rows="2"></textarea>
+
+        <button type="submit">保存</button>
+        <button type="reset">キャンセル</button>
+      </form>
+    </div>
+
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>タスク名</th>
+        <th>期日</th>
+      </tr>
+    </thead>
   </body>
 </html>
