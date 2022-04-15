@@ -27,12 +27,14 @@
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <!-- jQueryについて、fadeInが使えないため".slim"でないものと差し替え
-    <script
+              <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
       crossorigin="anonymous"
     ></script>
     -->
+
+      
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
@@ -45,7 +47,6 @@
       crossorigin="anonymous"
     ></script>
 
-    <!-- モーダルウィンドウ実装　入れ替えよ　https://webdesignday.jp/inspiration/technique/css/4680/ -->
     <!-- Button trigger modal -->
     <h1>
       <div class="btn btn-primary js-modal-open" href="" type="button"
@@ -59,27 +60,54 @@
       <div class="modal__bg js-modal-close"></div>
       <div class="modal__content">
         <p>
-          <form action="#" method="post">
-            <label for="category_id">カテゴリ</label>
-            <select name="category_id" id="category_id">
-              <option>生活</option>
-              <option>勉強</option>
-              <option>仕事</option>
-              <option>趣味</option>
-            </select>
-    
-            <label for="task_name">タスク名</label>
-            <input type="text" name="task_name" id="task_name" />
-    
-            <label for="deadline">期日</label>
-            <input type="date" />
-    
-            <label for="memo">メモ</label>
-            <textarea name="memo" id="memo" rows="2"></textarea>
-          </form>
+            <h5 class="modal-title">タスクを追加</h5>
+            <form action="#" method="post">
+              <div class="row">
+                <div class="col-sm-2">
+                <label for="category_id">カテゴリ</label></div>
+                <div class="col-sm-3">
+                <select name="category_id" id="category_id">
+                  <option>生活</option>
+                  <option>勉強</option>
+                  <option>仕事</option>
+                  <option>趣味</option>
+                </select></div>
+              </div>
+      
+              <div class="row">
+                <div class="col-sm-2">
+                  <label for="task_name">タスク名</label>
+                </div><div class="col-sm-10">
+                  <input type="text" name="task_name" id="task_name" />
+                </div>
+              </div>
+      
+              <div class="row">
+                <div class="col-sm-2">
+                  <label for="deadline">期日</label>
+                </div><div class="col-sm-10">
+                  <input type="date" />
+                </div>
+              </div>
+      
+              <div class="row">
+                <div class="col-sm-2">
+                  <label for="memo">メモ</label>
+                </div><div class="col-sm-10">
+                  <textarea name="memo" id="memo" rows="2"></textarea><br>
+                </div>
+              </div>
+        
+        
+            </form>
         </p>
-        <a class="js-modal-close" href="">閉じる</a>
-        <a type="submit" href="" >保存</a>
+        <div class="row">
+          <div class="col-sm-1">
+            <a class="js-modal-close" href="">閉じる</a>
+          </div><div class="col-sm-offset-10 col-sm-1">
+            <a type="submit" href="" >保存</a>
+          </div>
+        </div>
       </div>
       <!--modal__inner-->
     </div>
@@ -97,7 +125,17 @@
       });
     </script>
 
-<table border="1">
+    <!--カテゴリを選択する-->
+    <label for="category_id">表示カテゴリを選択</label>
+    <select name="category_id" id="category_id">
+      <option>全て</option>
+      <option>生活</option>
+      <option>勉強</option>
+      <option>仕事</option>
+      <option>趣味</option>
+    </select></div>
+    <!--タスク表を並べる-->
+    <br>
     <thead>
       <tr>
         <th>#</th>
@@ -105,30 +143,68 @@
         <th>期日</th>
       </tr>
     </thead>
-  </table>
+  
 
-  <!--テーブル組み込みリスト-->
+    <!--テーブル組み込みリスト-->
 
-  <div class="list-group">
-    <button type="button" class="list-group-item list-group-item-action" >生活</button>
-    <button type="button" class="list-group-item list-group-item-action">勉強</button>
-    <button type="button" class="list-group-item list-group-item-action" >仕事</button>
-    <button type="button" class="list-group-item list-group-item-action">趣味</button>
-  </div>
+    <div class="list-group">
+      
+        <!-- 折りたたみ展開ボタン -->
+        <div onclick="obj=document.getElementById('menu1').style; obj.display=(obj.display=='none')?'block':'none';">
+          <button type="button" class="list-group-item list-group-item-action" >生活</button>
+        </div>
+        <!--// 折りたたみ展開ボタン -->
+            
+        <!-- ここから先を折りたたむ -->
+        <div id="menu1" style="display:none;clear:both;">
+          aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        <!--この部分が折りたたまれ、展開ボタンをクリックすることで展開します。-->
+        </div>
+        <!--// ここまでを折りたたむ -->
 
-  <!-- お試し段階 https://soarbog.com/wp/939　-->
-  <!-- 折りたたみ展開ボタン -->
-  <div onclick="obj=document.getElementById('menu1').style; obj.display=(obj.display=='none')?'block':'none';">
-  <a style="cursor:pointer;">▼ クリックで展開</a>
-  </div>
-  <!--// 折りたたみ展開ボタン -->
-    
-  <!-- ここから先を折りたたむ -->
-  <div id="menu1" style="display:none;clear:both;">
-   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-  <!--この部分が折りたたまれ、展開ボタンをクリックすることで展開します。-->
-   
-  </div>
-  <!--// ここまでを折りたたむ -->
+        <div onclick="obj=document.getElementById('menu2').style; obj.display=(obj.display=='none')?'block':'none';">
+          <button type="button" class="list-group-item list-group-item-action" >勉強</button>
+        </div>
+        <div id="menu2" style="display:none;clear:both;">
+          bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+        </div>
+
+        <div onclick="obj=document.getElementById('menu3').style; obj.display=(obj.display=='none')?'block':'none';">
+          <button type="button" class="list-group-item list-group-item-action" >趣味</button>
+        </div>
+        <div id="menu3" style="display:none;clear:both;">
+          ccccccccccccccccccccccccccccccc
+        </div>
+
+        <div onclick="obj=document.getElementById('menu4').style; obj.display=(obj.display=='none')?'block':'none';">
+          <button type="button" class="list-group-item list-group-item-action" >仕事</button>
+        </div>
+        <div id="menu4" style="display:none;clear:both;">
+          dddddddddddddddddddddddddddddddddddddd
+        </div>
+      <!--
+      <button type="button" class="list-group-item list-group-item-action">勉強</button>
+      <button type="button" class="list-group-item list-group-item-action" >仕事</button>
+      <button type="button" class="list-group-item list-group-item-action">趣味</button>
+      -->
+    </div>
+
+    <!-- お試し段階 https://soarbog.com/wp/939　-->
+    <!-- 折りたたみ展開ボタン -->
+    <div onclick="obj=document.getElementById('menu').style; obj.display=(obj.display=='none')?'block':'none';">
+      <a style="cursor:pointer;">▼ クリックで展開</a>
+    </div>
+    <!--// 折りたたみ展開ボタン -->
+        
+     <!-- ここから先を折りたたむ -->
+    <div id="menu" style="display:none;clear:both;">
+    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    <!--この部分が折りたたまれ、展開ボタンをクリックすることで展開します。-->
+      
+    </div>
+    <!--// ここまでを折りたたむ -->
+
+
+
 </body>
 </html>
