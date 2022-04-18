@@ -50,7 +50,7 @@
       <div class="modal__content">
         <p>
             <h5 class="modal-title">タスクを追加</h5>
-            <form id="create-form">
+            <form>
               <div class="row">
                 <div class="col-sm-2">
                 <label for="category">カテゴリ</label></div>
@@ -92,13 +92,11 @@
         </p>
         <div class="row">
           <div class="col-sm-1">
-            <!--<a class="js-modal-close" href="">閉じる</a>-->
-            <button class="js-modal-close">キャンセル</button>
-            
+            <!--<button class="js-modal-close">キャンセル</button>-->
+            <a class="js-modal-close" href="">閉じる</a>
           </div><div class="col-sm-offset-10 col-sm-1">
-            <!--<a type="submit" href="" id="create-task">保存</a>-->
-            
-            <button class="js-modal-close" id="create-task">登録</button>
+            <!--<button class="js-modal-close" id="create-task">登録</button>-->
+            <a type="submit" href="" id="create-task">保存</a>
           </div>
         </div>
       </div>
@@ -200,7 +198,7 @@
       crossorigin="anonymous"
     ></script>
     <!-- scriptタグでhttpPost関数を呼び出すjavascriptファイルを読み込む -->
-    <script src="../javascripts/index.js"></script>
+    <sctipt src="../javascripts/index.js"></sctipt>
 
     <!--modal jQueryの処理-->
     <script>
@@ -216,14 +214,13 @@
       });
     
   //登録ボタン押下時
-  $("#create-task").on("click", async function () {
+  $("create-task").on("click", async function () {
     // リクエストデータをフォームから取得
     const requestData = {
       taskName: $("#create-form input[name=task]").val(),
       deadline: $("#create-form input[name=derdline]").val(),
       category: $("#create-form select[name=category]").val(),
     };
-    console.log($("#create-form input[name=task]").val());
 
     //　新規登録APIを実行
     const response = await httpPost(
@@ -232,14 +229,15 @@
     );
 
     // 画面をリロード
-    // window.location.reload();
+    window.location.reload();
   });
 
   //タスクの一覧取得
   $(async function () {
       // 一覧取得APIを実行
       const response = await httpGet(
-        "//" + window.location.host + "/api/tasks"
+        "//" + window.location.host + "/api/tasks",
+        requestData
       ); 
 
       const list = response.map((item) => {
