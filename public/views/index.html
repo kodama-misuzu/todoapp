@@ -49,7 +49,6 @@
       <div class="modal__bg js-modal-close"></div>
       <div class="modal__content">
         <p>
-            <h5 class="modal-title">タスクを追加</h5>
             <form id="create-form">
               <div class="row">
                 <div class="col-sm-2">
@@ -87,26 +86,20 @@
                 </div>
               </div>
         
-        
             </form>
         </p>
         <div class="row">
           <div class="col-sm-1">
             <!--<a class="js-modal-close" href="">閉じる</a>-->
             <button class="js-modal-close">キャンセル</button>
-            
           </div><div class="col-sm-offset-10 col-sm-1">
             <!--<a type="submit" href="" id="create-task">保存</a>-->
-            
             <button class="js-modal-close" id="create-task">登録</button>
           </div>
         </div>
       </div>
       <!--modal__inner-->
     </div>
-    
-
-    
     
 
     <!--カテゴリを選択する-->
@@ -120,7 +113,35 @@
     </select></div>
 
     <!--タスク表を並べる-->
-    <ul id="task-line"></ul>
+    <ul id="task-list"></ul>
+
+    <!-- 更新するときに表示すると思う -->
+    <div class="update-form" id="update-form" style="display: none">
+      <form>
+        <input type="hidden" name="id" />
+        <label for="category">カテゴリ</label>
+        <select id="category" name="category">
+          <option value="1">生活</option>
+          <option value="2">勉強</option>
+          <option value="3">仕事</option>
+          <option value="4">趣味</option>
+        </select>
+        <label for="task">タスク名</label>
+        <input type="text" id="task" name="task" />
+        <label for="deadline">期日</label>
+        <input type="date" id="deadline" name="deadline" />
+
+        <label for="status">ステータス</label>
+        <select id="status" name="status">
+          <option value="1">完了</option>
+          <option value="2">作業中</option>
+          <option value="3">未実装</option>
+        </select>
+      </form>
+
+      <button class="display-none" id="close-task">キャンセル</button>
+      <button class="display-none" id="update-task">保存</button>
+    </div>
     
 
     <!--テーブル組み込みリスト-->
@@ -220,10 +241,9 @@
     // リクエストデータをフォームから取得
     const requestData = {
       taskName: $("#create-form input[name=task]").val(),
-      deadline: $("#create-form input[name=derdline]").val(),
+      deadline: $("#create-form input[name=deadline]").val(),
       category: $("#create-form select[name=category]").val(),
     };
-    console.log($("#create-form input[name=task]").val());
 
     //　新規登録APIを実行
     const response = await httpPost(
@@ -232,7 +252,7 @@
     );
 
     // 画面をリロード
-    // window.location.reload();
+    window.location.reload();
   });
 
   //タスクの一覧取得
@@ -256,6 +276,72 @@
       // ulタグにリストを追加
       $("ul#task-list").append(list);
     });
+
+    // 更新ボタン押下時
+    $(document).on("click", "#update-button", async function () {
+      $("#update-form").show();
+      const id = $(this).data("id");
+      const response = await httpGet(
+        "//" + window.location.host + `/api/tasks/${id}`
+      );
+
+      // 日付を　xxxx-xx-xx　に変換
+      const date = new Date(response[0].deadline);
+      const year = date.getFullYear();
+      const month = ("0" + (date.getMonth() + 1)).slice(-2);
+      const day = ("0" + (date.getDate() + 1)).slice(-2);
+      const deadlineVal = `${year}-${month}-${day}`;
+
+      // 初期値をセット
+      $("#update-form input[name=id]").val(response[0].id);
+      $("#update-form input[name=task]").val(response[0].task_name);
+      $("#update-form input[name=deadline]").val(deadlineVal);
+      $("#update-form select[name=category]").val(response[0].category_id);
+      $("#update-form select[name=status]").val(response[0].task_status);
+    });
+
+    //キャンセルボタンを押した時
+    $("#close-task").on("click", async function () {
+      $("#update-form").hide();
+    });
+
+    // 保存ボタンを押した時
+    $("#update-task").on("click", async function () {
+      const id = $("#update-form input[name=id]").val();
+
+      // リクエストデータをフォームから取得
+      const requestData = {
+        taskName: $("#update-form input[name=task]").val(),
+        deadline: $("#update-form input[name=deadline]").val(),
+        category: $("#update-form select[name=category]").val(),
+        status: $("#update-form select[name=status]").val(),
+      };
+
+      // 新規登録APIを実行
+      const response = await httpUpdate(
+        "//" + window.location.host + `/api/tasks/${id}`,
+        requestData
+      );
+
+      // 画面をリロード
+      window.location.reload();
+    });
+
+    // 削除ボタン押した時
+    $(document).on("click", "#delete-button", async function () {
+      const taskName = $(this).data("delete");
+      if (confirm(`下記の内容を削除します。 \n ${taskName}`)) {
+        const id = $(this).data("id");
+
+        // 削除APIを実行
+        const response = await httpDelete(
+          "//" + window.location.host + `/api/tasks/${id}`
+        );
+
+        // 画面をリロード
+        window.location.reload();
+      }
+    })
   </script>
 
 </body>
