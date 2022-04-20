@@ -34,26 +34,31 @@
     ></script>
     -->
 
-      
-    
+     
     <!-- Button trigger modal -->
     <h1>
-      <div class="btn btn-primary js-modal-open" href="" type="button"
-          >+ タスクを追加</a
-        >
-      </div>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+        + タスクを追加
+      </button>
     </h1>
 
-    <!-- modalの中身 -->
-    <div class="modal js-modal">
-      <div class="modal__bg js-modal-close"></div>
-      <div class="modal__content">
-        <p>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">タスクを追加</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
             <form id="create-form">
+
               <div class="row">
-                <div class="col-sm-2">
-                <label for="category">カテゴリ</label></div>
                 <div class="col-sm-3">
+                <label for="category">カテゴリ</label></div>
+                <div class="col-sm-2">
                 <select name="category" id="category">
                   <option value="1">生活</option>
                   <option value="2">勉強</option>
@@ -61,46 +66,41 @@
                   <option value="4">趣味</option>
                 </select></div>
               </div>
-      
+
               <div class="row">
-                <div class="col-sm-2">
+                <div class="col-md-3">
                   <label for="task">タスク名</label>
-                </div><div class="col-sm-10">
+                </div><div class="col-md-9">
                   <input type="text" name="task" id="task" />
                 </div>
               </div>
       
               <div class="row">
-                <div class="col-sm-2">
+                <div class="col-md-3">
                   <label for="deadline">期日</label>
-                </div><div class="col-sm-10">
+                </div><div class="col-md-9">
                   <input type="date" id="deadline" name="deadline" />
                 </div>
               </div>
       
               <div class="row">
-                <div class="col-sm-2">
+                <div class="col-md-3">
                   <label for="memo">メモ</label>
-                </div><div class="col-sm-10">
+                </div><div class="col-md-9">
                   <textarea name="memo" id="memo" rows="2"></textarea><br>
                 </div>
               </div>
         
             </form>
-        </p>
-        <div class="row">
-          <div class="col-sm-1">
-            <!--<a class="js-modal-close" href="">閉じる</a>-->
-            <button class="js-modal-close">キャンセル</button>
-          </div><div class="col-sm-offset-10 col-sm-1">
-            <!--<a type="submit" href="" id="create-task">保存</a>-->
-            <button class="js-modal-close" id="create-task">登録</button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+            <button type="button" class="btn btn-primary" id="create-task">登録</button>
           </div>
         </div>
       </div>
-      <!--modal__inner-->
     </div>
-    
+
 
     <!--カテゴリを選択する-->
     <label for="category_id">表示カテゴリを選択</label>
@@ -113,7 +113,7 @@
     </select></div>
 
     <!--タスク表を並べる-->
-    <ul id="task-list"></ul>
+    <ul id="task-list" class="list-group list-group-flush"></ul>
 
     <!-- 更新するときに表示すると思う -->
     <div class="update-form" id="update-form" style="display: none">
@@ -141,51 +141,6 @@
 
       <button class="display-none" id="close-task">キャンセル</button>
       <button class="display-none" id="update-task">保存</button>
-    </div>
-    
-
-    <!--テーブル組み込みリスト-->
-
-    <div class="list-group">
-      
-        <!-- 折りたたみ展開ボタン -->
-        <div onclick="obj=document.getElementById('menu1').style; obj.display=(obj.display=='none')?'block':'none';">
-          <button type="button" class="list-group-item list-group-item-action" >生活</button>
-        </div>
-        <!--// 折りたたみ展開ボタン -->
-            
-        <!-- ここから先を折りたたむ -->
-        <div id="menu1" style="display:none;clear:both;">
-          aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-        <!--この部分が折りたたまれ、展開ボタンをクリックすることで展開します。-->
-        </div>
-        <!--// ここまでを折りたたむ -->
-
-        <div onclick="obj=document.getElementById('menu2').style; obj.display=(obj.display=='none')?'block':'none';">
-          <button type="button" class="list-group-item list-group-item-action" >勉強</button>
-        </div>
-        <div id="menu2" style="display:none;clear:both;">
-          bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-        </div>
-
-        <div onclick="obj=document.getElementById('menu3').style; obj.display=(obj.display=='none')?'block':'none';">
-          <button type="button" class="list-group-item list-group-item-action" >趣味</button>
-        </div>
-        <div id="menu3" style="display:none;clear:both;">
-          ccccccccccccccccccccccccccccccc
-        </div>
-
-        <div onclick="obj=document.getElementById('menu4').style; obj.display=(obj.display=='none')?'block':'none';">
-          <button type="button" class="list-group-item list-group-item-action" >仕事</button>
-        </div>
-        <div id="menu4" style="display:none;clear:both;">
-          dddddddddddddddddddddddddddddddddddddd
-        </div>
-      <!--
-      <button type="button" class="list-group-item list-group-item-action">勉強</button>
-      <button type="button" class="list-group-item list-group-item-action" >仕事</button>
-      <button type="button" class="list-group-item list-group-item-action">趣味</button>
-      -->
     </div>
 
     <!-- お試し段階 https://soarbog.com/wp/939　-->
@@ -264,12 +219,25 @@
 
       const list = response.map((item) => {
         // リストを表示
+        //↓↓リストの色分けに挑戦中、エラーでてる
+//        if(item.category_id = 1){
+//          const coler = "list-group-item-success";
+//        }else if(item.category_id = 2){
+//          const coler = "";
+//        }else if(item.category_id = 3){
+//          const coler = "list-group-item-primary";
+//        }else if(item.category_id = 4){
+//          const coler = "list-group-item-warning";
+//        }
+//        console.log=coler;
+        //↑↑ここまで
         return `
-          <li>
-              <span>${item.task_name}</span>
-              <span>${item.deadline}</span>
-              <span><button id="update-button" data-id=${item.id} >更新</button></span>
-              <span><button id="delete-button" data-id=${item.id} data-dalete=${item.task_name} >削除</button></span>
+          <li class="list-group-item">
+            <span>${item.category_id}</span>
+            <span>${item.task_name}</span>
+            <span>${item.deadline}</span>
+            <span><button id="update-button" data-id=${item.id} >更新</button></span>
+            <span><button id="delete-button" data-id=${item.id} data-dalete=${item.task_name} >削除</button></span>
           </li>`;
       });
 
