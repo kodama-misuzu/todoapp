@@ -60,10 +60,10 @@
                 <label for="category">カテゴリ</label></div>
                 <div class="col-sm-2">
                 <select name="category" id="category">
-                  <option value="1">生活</option>
-                  <option value="2">勉強</option>
-                  <option value="3">仕事</option>
-                  <option value="4">趣味</option>
+                  <option class="text-success" value="1">生活</option>
+                  <option class="text-warning" value="2">勉強</option>
+                  <option class="text-danger" value="3">仕事</option>
+                  <option class="text-secondary" value="4">趣味</option>
                 </select></div>
               </div>
 
@@ -103,17 +103,30 @@
 
 
     <!--カテゴリを選択する-->
-    <label for="category_id">表示カテゴリを選択</label>
-    <select name="category_id" id="category_id">
-      <option>全て</option>
-      <option>生活</option>
-      <option>勉強</option>
-      <option>仕事</option>
-      <option>趣味</option>
+    <label for="category_id_select">表示カテゴリを選択</label>
+    <select name="category_id_select" id="category_id_select">
+      <option value="0">全て</option>
+      <option class="text-success" value="1">生活</option>
+      <option class="text-warning" value="2">勉強</option>
+      <option class="text-danger" value="3">仕事</option>
+      <option class="text-secondary" value="4">趣味</option>
     </select></div>
 
     <!--タスク表を並べる-->
-    <ul id="task-list" class="list-group list-group-flush"></ul>
+    <ul id="task-list" class="list-group list-group-flush">
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-lg-8">
+            <span>＃</span>
+            <span>タスク名</span>
+          </div><div class="col-lg-2">
+            <span>期日</span>
+          </div><div class="col-lg-1">
+            <span>編集</span>
+          </div>
+        </div>
+      </li>
+    </ul>
 
     <!-- 更新するときに表示すると思う -->
     <div class="update-form" id="update-form" style="display: none">
@@ -121,10 +134,10 @@
         <input type="hidden" name="id" />
         <label for="category">カテゴリ</label>
         <select id="category" name="category">
-          <option value="1">生活</option>
-          <option value="2">勉強</option>
-          <option value="3">仕事</option>
-          <option value="4">趣味</option>
+          <option class="text-success" value="1">生活</option>
+          <option class="text-warning" value="2">勉強</option>
+          <option class="text-danger" value="3">仕事</option>
+          <option class="text-secondary" value="4">趣味</option>
         </select>
         <label for="task">タスク名</label>
         <input type="text" id="task" name="task" />
@@ -220,25 +233,30 @@
       const list = response.map((item) => {
         // リストを表示
         //↓↓リストの色分けに挑戦中、エラーでてる
-//        if(item.category_id = 1){
-//          const coler = "list-group-item-success";
-//        }else if(item.category_id = 2){
-//          const coler = "";
-//        }else if(item.category_id = 3){
-//          const coler = "list-group-item-primary";
-//        }else if(item.category_id = 4){
-//          const coler = "list-group-item-warning";
-//        }
-//        console.log=coler;
-        //↑↑ここまで
+        if(item.category_id == 1){
+          var coler = "text-success";
+        }else if(item.category_id == 2){
+          var coler = "text-warning";
+        }else if(item.category_id == 3){
+          var coler = "text-danger";
+        }else if(item.category_id == 4){
+          var coler = "text-secondary";
+        }
+        
         return `
-          <li class="list-group-item">
-            <span>${item.category_id}</span>
-            <span>${item.task_name}</span>
-            <span>${item.deadline}</span>
-            <span><button id="update-button" data-id=${item.id} >更新</button></span>
-            <span><button id="delete-button" data-id=${item.id} data-dalete=${item.task_name} >削除</button></span>
-          </li>`;
+          <li id="area" class="list-group-item">
+            <div class="row">
+              <div class="col-lg-8">
+                <span><font class="${coler}" size="5">■</font></span>
+                <span class="font-weight-bold">${item.task_name}</span>
+              </div><div class="col-lg-2">
+                <span class="text-nowrap font-weight-light">${item.deadline}</span>
+              </div><div class="col-lg-1">
+                <span><button id="update-button" data-id=${item.id} >更新</button></span>
+                <span><button id="delete-button" data-id=${item.id} data-dalete=${item.task_name} >削除</button></span>
+              </div>
+            </div>
+          </li> `;
       });
 
       // ulタグにリストを追加
@@ -309,6 +327,18 @@
         // 画面をリロード
         window.location.reload();
       }
+    })
+
+    // category_id_selectの値によって表示内容を変更
+    $("#category_id_select").change(function() {
+      // value値を取得
+      var str = $("#category_id_select").val();
+      console.log(str);
+      //$("ul#task-list").children().remove();
+      //.childrenにより、task-listの子要素のみを消す
+      $(document).ready(function(){
+      })
+      
     })
   </script>
 
