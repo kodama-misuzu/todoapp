@@ -15,8 +15,8 @@ postTasks = async function (body) {
     //ここにSQLを記述する
     console.log(body);
     const sql =
-      "INSERT INTO todoapp.t_task (task_name, deadline, category_id) VALUES (?,?,?);";
-    let d = [body.taskName, body.deadline, body.category];
+      "INSERT INTO todoapp.t_task (task_name, deadline, category_id, memo) VALUES (?,?,?,?);";
+    let d = [body.taskName, body.deadline, body.category, body.memo];
     const [rows, fields] = await connection.query(sql, d);
 
     // console.log(rows);
@@ -39,7 +39,7 @@ getTasks = async function () {
     connection = await mysql.createConnection(config.dbSetting);
     // ここにSQLを記述する
     const sql =
-      "SELECT t_task.id, t_task.category_id, m_category.category_name, t_task.task_name, t_task.deadline, t_task.task_status, t_task.updated_at, t_task.created_at FROM t_task LEFT JOIN m_category ON t_task.category_id = m_category.id;";
+      "SELECT t_task.id, t_task.category_id, m_category.category_name, t_task.task_name, t_task.deadline, t_task.task_status, t_task.updated_at, t_task.created_at, t_task.memo FROM t_task LEFT JOIN m_category ON t_task.category_id = m_category.id;";
     const [rows, fields] = await connection.query(sql);
     return rows;
   } catch (err) {

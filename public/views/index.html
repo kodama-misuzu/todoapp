@@ -87,7 +87,7 @@
                 <div class="col-md-3">
                   <label for="memo">メモ</label>
                 </div><div class="col-md-9">
-                  <textarea name="memo" id="memo" rows="2"></textarea><br>
+                  <textarea name="memo" id="memo" rows="10" cols="30"></textarea>
                 </div>
               </div>
         
@@ -113,7 +113,7 @@
     </select></div>
 
     <!--タスク表を並べる-->
-    <ul id="task-list" class="list-group list-group-flush">
+    <ul class="list-group list-group-flush">
       <li class="list-group-item">
         <div class="row">
           <div class="col-lg-8">
@@ -127,6 +127,7 @@
         </div>
       </li>
     </ul>
+    <div id="task-list" class="list-group list-group-flush"></div>
 
     <!-- 更新するときに表示すると思う -->
     <div class="update-form" id="update-form" style="display: none">
@@ -171,6 +172,10 @@
     </div>
     <!--// ここまでを折りたたむ -->
 
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+    </div>
+
 
     <!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
     <script
@@ -211,6 +216,7 @@
       taskName: $("#create-form input[name=task]").val(),
       deadline: $("#create-form input[name=deadline]").val(),
       category: $("#create-form select[name=category]").val(),
+      memo: $("#create-form textarea[name=memo]").val(),
     };
 
     //　新規登録APIを実行
@@ -244,23 +250,27 @@
         }
         
         return `
-          <li id="area" class="list-group-item">
-            <div class="row">
-              <div class="col-lg-8">
-                <span><font class="${coler}" size="5">■</font></span>
-                <span class="font-weight-bold">${item.task_name}</span>
-              </div><div class="col-lg-2">
-                <span class="text-nowrap font-weight-light">${item.deadline}</span>
-              </div><div class="col-lg-1">
-                <span><button id="update-button" data-id=${item.id} >更新</button></span>
-                <span><button id="delete-button" data-id=${item.id} data-dalete=${item.task_name} >削除</button></span>
-              </div>
+          <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-lg-8">
+                  <span><font class="${coler}" size="5">■</font></span>
+                  <span class="font-weight-bold">${item.task_name}</span>
+                </div><div class="col-lg-2">
+                  <span class="text-nowrap font-weight-light">${item.deadline}</span>
+                </div><div class="col-lg-1">
+                  <span><button id="update-button" data-id=${item.id} >更新</button></span>
+                  <span><button id="delete-button" data-id=${item.id} data-dalete=${item.task_name} >削除</button></span>
+                </div>
             </div>
-          </li> `;
+            <div class="row">
+              <span class="small text-muted">メモ：　</span>
+              <span>${item.memo}</span>
+            </div>
+          </a> `;
       });
 
       // ulタグにリストを追加
-      $("ul#task-list").append(list);
+      $("div#task-list").append(list);
     });
 
     // 更新ボタン押下時
@@ -333,11 +343,68 @@
     $("#category_id_select").change(function() {
       // value値を取得
       var str = $("#category_id_select").val();
-      console.log(str);
-      //$("ul#task-list").children().remove();
+      $("ul#task-list").children().remove();
       //.childrenにより、task-listの子要素のみを消す
-      $(document).ready(function(){
-      })
+      //選択したカテゴリーのみを取得、表示
+
+      //タスクの一覧取得
+      $(async function () {
+        // 一覧取得APIを実行
+        const response = await httpGet(
+          "//" + window.location.host + "/api/tasks"
+        ); 
+
+        const list = response.map((item) => {
+          // リストを表示
+          //↓↓リストの色分けに挑戦中、エラーでてる
+          if(item.category_id == 1){
+            var coler = "text-success";
+          }else if(item.category_id == 2){
+            var coler = "text-warning";
+          }else if(item.category_id == 3){
+            var coler = "text-danger";
+          }else if(item.category_id == 4){
+            var coler = "text-secondary";
+          }
+
+          if(str == 0){
+            return `
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col-lg-8">
+                  <span><font class="${coler}" size="5">■</font></span>
+                  <span class="font-weight-bold">${item.task_name}</span>
+                </div><div class="col-lg-2">
+                  <span class="text-nowrap font-weight-light">${item.deadline}</span>
+                </div><div class="col-lg-1">
+                  <span><button id="update-button" data-id=${item.id} >更新</button></span>
+                  <span><button id="delete-button" data-id=${item.id} data-dalete=${item.task_name} >削除</button></span>
+                </div>
+              </div>
+            </li> `;
+          } else if (str == item.category_id){
+            return `
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col-lg-8">
+                  <span><font class="${coler}" size="5">■</font></span>
+                  <span class="font-weight-bold">${item.task_name}</span>
+                </div><div class="col-lg-2">
+                  <span class="text-nowrap font-weight-light">${item.deadline}</span>
+                </div><div class="col-lg-1">
+                  <span><button id="update-button" data-id=${item.id} >更新</button></span>
+                  <span><button id="delete-button" data-id=${item.id} data-dalete=${item.task_name} >削除</button></span>
+                </div>
+              </div>
+            </li> `;
+          }
+                 // <span><button id="delete-button" data-id=${item.id} data-dalete=${item.task_name} >削除</button></span>
+          
+        });
+
+        // ulタグにリストを追加
+        $("ul#task-list").append(list);
+      });
       
     })
   </script>
