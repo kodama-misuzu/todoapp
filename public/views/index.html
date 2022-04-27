@@ -157,20 +157,6 @@
       <button class="display-none" id="update-task">保存</button>
     </div>
 
-    <!-- お試し段階 https://soarbog.com/wp/939　-->
-    <!-- 折りたたみ展開ボタン -->
-    <div onclick="obj=document.getElementById('menu').style; obj.display=(obj.display=='none')?'block':'none';">
-      <a style="cursor:pointer;">▼ クリックで展開</a>
-    </div>
-    <!--// 折りたたみ展開ボタン -->
-        
-     <!-- ここから先を折りたたむ -->
-    <div id="menu" style="display:none;clear:both;">
-    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-    <!--この部分が折りたたまれ、展開ボタンをクリックすることで展開します。-->
-      
-    </div>
-    <!--// ここまでを折りたたむ -->
 
 
     <!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
@@ -250,7 +236,7 @@
         let date = new Date(item.deadline);
         let year = date.getFullYear();
         let month = ("0" + (date.getMonth() + 1)).slice(-2);
-        let day = ("0" + (date.getDate() + 1)).slice(-2);
+        let day = ("0" + date.getDate()).slice(-2);
         let dead = `${year}-${month}-${day}`;
 
         //今日の日付確認
@@ -286,14 +272,16 @@
                   <span class="font-weight-bold">${item.task_name}</span>
                 </div><div class="col-lg-2">
                   <span class="text-nowrap font-weight-light">${dead}</span>
-                </div><div class="col-lg-1">
+                </div><div class="col-lg-2">
                   <span><button id="update-button" data-id=${item.id} >更新</button></span>
                   <span><button id="delete-button" data-id=${item.id} data-dalete=${item.task_name} >削除</button></span>
                 </div>
             </div>
             <!-- 折りたたみ展開ボタン -->
-            <div onclick="obj=document.getElementById('${task_id}').style; obj.display=(obj.display=='none')?'block':'none';">
-              <a style="cursor:pointer;" class="text-muted">▼ 詳細表示</a>
+            <div class="row">
+              <div onclick="obj=document.getElementById('${task_id}').style; obj.display=(obj.display=='none')?'block':'none';">
+                <a style="cursor:pointer;" class="text-muted">▼ 詳細表示</a>
+              </div>
             </div>
             <!--// 折りたたみ展開ボタン -->
                 
@@ -393,7 +381,7 @@
       //.childrenにより、task-listの子要素のみを消す
       //選択したカテゴリーのみを取得、表示
 
-       //タスクの一覧取得
+      //タスクの一覧取得
       $(async function () {
       // 一覧取得APIを実行
       const response = await httpGet(
@@ -412,33 +400,58 @@
         }else if(item.category_id == 4){
           var coler = "text-secondary";
         }
-
-        //日付整理
-        const date = new Date(response[0].deadline);
-        const year = date.getFullYear();
-        const month = ("0" + (date.getMonth() + 1)).slice(-2);
-        const day = ("0" + (date.getDate() + 1)).slice(-2);
-        const dead = `${year}-${month}-${day}`;
         
+        //日付整理
+        let date = new Date(item.deadline);
+        let year = date.getFullYear();
+        let month = ("0" + (date.getMonth() + 1)).slice(-2);
+        let day = ("0" + date.getDate()).slice(-2);
+        let dead = `${year}-${month}-${day}`;
+
+        //今日の日付確認
+        let daten = new Date();
+        let yearn = daten.getFullYear();
+        let monthn = daten.getMonth()+1;
+        let dayn = daten.getDate();
+
+        console.log(`${yearn}-${monthn}-${dayn}`+"or"+dead)
+
+        if(year == yearn && month == monthn){
+          if(day == dayn){
+            var list_coler="list-group-item-danger"
+          }else if(day == (dayn+1)){
+            var list_coler="list-group-item-warning"
+          }else if(day < dayn){
+            var list_coler="list-group-item-dark"
+          }else{
+            var list_coler="";
+          }
+        }else if(year < yearn || month < monthn){
+          var list_coler="list-group-item-dark"
+        }else{
+          var list_coler="";
+        }
         var task_id = "l-"+item.id
         
         if(str == 0){
-            return `
-            <li type="button" class="list-group-item list-group-item-action" aria-current="true">
+          return `
+          <li type="button" class="list-group-item list-group-item-action ${list_coler}" aria-current="true">
               <div class="row">
                 <div class="col-lg-8">
                   <span><font class="${coler}" size="5">■</font></span>
                   <span class="font-weight-bold">${item.task_name}</span>
                 </div><div class="col-lg-2">
                   <span class="text-nowrap font-weight-light">${dead}</span>
-                </div><div class="col-lg-1">
+                </div><div class="col-lg-2">
                   <span><button id="update-button" data-id=${item.id} >更新</button></span>
                   <span><button id="delete-button" data-id=${item.id} data-dalete=${item.task_name} >削除</button></span>
                 </div>
             </div>
             <!-- 折りたたみ展開ボタン -->
-            <div onclick="obj=document.getElementById('${task_id}').style; obj.display=(obj.display=='none')?'block':'none';">
-              <a style="cursor:pointer;">▼ 詳細表示</a>
+            <div class="row">
+              <div onclick="obj=document.getElementById('${task_id}').style; obj.display=(obj.display=='none')?'block':'none';">
+                <a style="cursor:pointer;" class="text-muted">▼ 詳細表示</a>
+              </div>
             </div>
             <!--// 折りたたみ展開ボタン -->
                 
@@ -457,23 +470,25 @@
             </div>
             <!--// ここまでを折りたたむ -->
           </li> `;
-          } else if (str == item.category_id){
-            return `
-            <li type="button" class="list-group-item list-group-item-action" aria-current="true">
+        } else if (str == item.category_id){
+          return `
+          <li type="button" class="list-group-item list-group-item-action ${list_coler}" aria-current="true">
               <div class="row">
                 <div class="col-lg-8">
                   <span><font class="${coler}" size="5">■</font></span>
                   <span class="font-weight-bold">${item.task_name}</span>
                 </div><div class="col-lg-2">
                   <span class="text-nowrap font-weight-light">${dead}</span>
-                </div><div class="col-lg-1">
+                </div><div class="col-lg-2">
                   <span><button id="update-button" data-id=${item.id} >更新</button></span>
                   <span><button id="delete-button" data-id=${item.id} data-dalete=${item.task_name} >削除</button></span>
                 </div>
             </div>
             <!-- 折りたたみ展開ボタン -->
-            <div onclick="obj=document.getElementById('${task_id}').style; obj.display=(obj.display=='none')?'block':'none';">
-              <a style="cursor:pointer;">▼ 詳細表示</a>
+            <div class="row">
+              <div onclick="obj=document.getElementById('${task_id}').style; obj.display=(obj.display=='none')?'block':'none';">
+                <a style="cursor:pointer;" class="text-muted">▼ 詳細表示</a>
+              </div>
             </div>
             <!--// 折りたたみ展開ボタン -->
                 
@@ -492,9 +507,7 @@
             </div>
             <!--// ここまでを折りたたむ -->
           </li> `;
-          }
-                 // <span><button id="delete-button" data-id=${item.id} data-dalete=${item.task_name} >削除</button></span>
-          
+        }
       });
 
       // ulタグにリストを追加
