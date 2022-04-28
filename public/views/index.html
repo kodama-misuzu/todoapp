@@ -87,7 +87,7 @@
                 <div class="col-md-3">
                   <label for="memo">メモ</label>
                 </div><div class="col-md-9">
-                  <textarea name="memo" id="memo" rows="10" cols="30"></textarea>
+                  <textarea name="memo" id="memo" rows="7" cols="30"></textarea>
                 </div>
               </div>
         
@@ -131,26 +131,57 @@
 
     <!-- 更新するときに表示すると思う -->
     <div class="update-form" id="update-form" style="display: none">
-      <form>
-        <input type="hidden" name="id" />
-        <label for="category">カテゴリ</label>
-        <select id="category" name="category">
-          <option class="text-success" value="1">生活</option>
-          <option class="text-warning" value="2">勉強</option>
-          <option class="text-danger" value="3">仕事</option>
-          <option class="text-secondary" value="4">趣味</option>
-        </select>
-        <label for="task">タスク名</label>
-        <input type="text" id="task" name="task" />
-        <label for="deadline">期日</label>
-        <input type="date" id="deadline" name="deadline" />
+      <form id="create-form">
 
-        <label for="status">ステータス</label>
-        <select id="status" name="status">
-          <option value="1">完了</option>
-          <option value="2">作業中</option>
-          <option value="3">未実装</option>
-        </select>
+        <div class="row">
+          <div class="col-sm-3">
+            <input type="hidden" name="id" />
+          <label for="category">カテゴリ</label></div>
+          <div class="col-sm-2">
+          <select name="category" id="category">
+            <option class="text-success" value="1">生活</option>
+            <option class="text-warning" value="2">勉強</option>
+            <option class="text-danger" value="3">仕事</option>
+            <option class="text-secondary" value="4">趣味</option>
+          </select></div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <label for="task">タスク名</label>
+          </div><div class="col-md-9">
+            <input type="text" name="task" id="task" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <label for="deadline">期日</label>
+          </div><div class="col-md-9">
+            <input type="date" id="deadline" name="deadline" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <label for="memo">メモ</label>
+          </div><div class="col-md-9">
+            <textarea name="memo" id="memo" rows="2" cols="40"></textarea>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <label for="status">ステータス</label>
+          </div><div class="col-md-9">
+            <select id="status" name="status">
+              <option value="1">完了</option>
+              <option value="2">作業中</option>
+              <option value="3">未実装</option>
+            </select>
+          </div>
+        </div>
+  
       </form>
 
       <button class="display-none" id="close-task">キャンセル</button>
@@ -326,6 +357,7 @@
       $("#update-form input[name=task]").val(response[0].task_name);
       $("#update-form input[name=deadline]").val(deadlineVal);
       $("#update-form select[name=category]").val(response[0].category_id);
+      $("#create-form textarea[name=memo]").val(response[0].memo);
       $("#update-form select[name=status]").val(response[0].task_status);
     });
 
@@ -343,6 +375,7 @@
         taskName: $("#update-form input[name=task]").val(),
         deadline: $("#update-form input[name=deadline]").val(),
         category: $("#update-form select[name=category]").val(),
+        memo: $("#create-form textarea[name=memo]").val(),
         status: $("#update-form select[name=status]").val(),
       };
 

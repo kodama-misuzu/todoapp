@@ -13,7 +13,6 @@ postTasks = async function (body) {
   try {
     connection = await mysql.createConnection(config.dbSetting);
     //ここにSQLを記述する
-    console.log(body);
     const sql =
       "INSERT INTO todoapp.t_task (task_name, deadline, category_id, memo) VALUES (?,?,?,?);";
     let d = [body.taskName, body.deadline, body.category, body.memo];
@@ -82,11 +81,12 @@ patchTasksId = async function (id, body) {
     connection = await mysql.createConnection(config.dbSetting);
     // ここにSQLを記述する
     const sql =
-      "UPDATE t_task SET task_name=?, deadline=?, category_id=?, task_status=?, updated_at=? WHERE id=?;";
+      "UPDATE t_task SET task_name=?, deadline=?, category_id=?, memo=?, task_status=?, updated_at=? WHERE id=?;";
     let d = [
       body.taskName,
       body.deadline,
       body.category,
+      body.memo,
       body.status,
       new Date(),
       id,
